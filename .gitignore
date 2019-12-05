@@ -1,0 +1,7 @@
+venv/
+.idea/
+*.log
+*.log.*
+*.csv
+*.lock
+*.pyc

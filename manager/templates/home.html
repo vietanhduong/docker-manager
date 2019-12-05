@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6 col-md-4">
+            <div class="row">
+                <h5>Containers</h5>
+            </div>
+            <div class="row" id="containers">
+
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-8">.col-xs-12 .col-md-8</div>
+    </div>
+</div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    var lastResponseLength = false;
+    var containerList = [];
+    var ajaxRequest = $.ajax({
+        type: 'get',
+        url: '/api/containers',
+        data: {},
+        dataType: 'json',
+        processData: false,
+        xhrFields: {
+            onprogress: e => {
+                var progressResponse;
+                var response = e.currentTarget.response;
+                if (lastResponseLength === false) {
+                    progressResponse = response;
+                    lastResponseLength = response.length;
+                } else {
+                    progressResponse = response.substring(lastResponseLength);
+                    lastResponseLength = response.length;
+                }
+
+                let parsedResponse = JSON.parse(progressResponse);
+                let container = $("#containers");
+                container.empty();
+                parsedResponse.forEach(e => container.append(`<div class="row">${e.name}</div>`))
+            }
+        }
+    });
+    // On completed
+    ajaxRequest.done(function (data) {
+        console.log('Complete response = ' + data);
+    });
+    // On failed
+    ajaxRequest.fail(function (error) {
+        console.log('Error: ', error);
+    });
+    console.log('Request Sent');
+</script>
+
+</body>
+</html>

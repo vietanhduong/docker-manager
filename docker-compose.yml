@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  manager:
+    image: vietanhs0817/docker-manager:latest
+    build: .
+    ports:
+      - 5000:5000
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
