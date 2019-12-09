@@ -14,9 +14,7 @@ def _before_request():
 
 
 def _after_request(response):
-    request = flask.request
-    origin = request.headers.get('Origin')
-    response.headers['Access-Control-Allow-Origin'] = origin
+    response.headers['Access-Control-Allow-Origin'] = "*"
     response.headers['Access-Control-Allow-Credentials'] = 'true'
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, ' \
