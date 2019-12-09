@@ -1,0 +1,34 @@
+{
+  "name": "docker-manager",
+  "version": "1.0.0",
+  "description": "This is front-end for docker-manager",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack -p --progress --config webpack.config.js",
+    "dev-build": "webpack --progress -d --config webpack.config.js",
+    "watch": "webpack --progress -d --config webpack.config.js --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anhdv817/docker-manager.git"
+  },
+  "keywords": [
+    "docker"
+  ],
+  "author": "anh.dv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anhdv817/docker-manager/issues"
+  },
+  "homepage": "https://github.com/anhdv817/docker-manager#readme",
+  "devDependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-react": "^7.7.4",
+    "babel-loader": "^8.0.6",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  }
+}

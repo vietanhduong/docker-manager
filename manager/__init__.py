@@ -36,8 +36,8 @@ def setup_logging(default_level=logging.INFO):
 
 
 def create_app(conf):
-    from manager import api
-    _app = flask.Flask(__name__)
+    from manager import api, views
+    _app = flask.Flask(__name__, static_folder="statics/dist", template_folder="statics")
     _app.config.from_object(conf)
     _app.json_encoder = json_encoder.JSONEncoder
 
@@ -50,4 +50,5 @@ def create_app(conf):
     _app.secret_key = conf.FLASK_APP_SECRET_KEY
 
     api.init_app(_app)
+    views.init_app(_app)
     return _app

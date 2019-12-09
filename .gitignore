@@ -5,3 +5,4 @@ venv/
 *.csv
 *.lock
 *.pyc
+node_modules/
