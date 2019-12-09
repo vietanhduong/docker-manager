@@ -1,10 +1,10 @@
 # coding=utf-8
 import logging
 import flask_restplus as _fr
-from flask import Response
+from flask import Response, stream_with_context
 
 from manager.utilities.namespace import Namespace
-from manager.service import docker as DockerService
+from manager.services import docker as DockerService
 
 __author__ = 'anh.dv'
 _logger = logging.getLogger(__name__)
@@ -44,3 +44,16 @@ class ContainerStop(_fr.Resource):
 class ContainerKill(_fr.Resource):
     def post(self, container_id: str):
         return dm.container_kill(container_id)
+
+
+@ns.route("/<container_id>/logs")
+class ContainerLogs(_fr.Resource):
+
+    def get(self, container_id: str):
+        resp = dm.container_logs(container_id)
+
+        def stream():
+            for line in resp.iter_lines():
+                yield line[8:] + b"\n"
+
+        return Response(stream_with_context(stream()), mimetype="text/plain; charset=utf8")
