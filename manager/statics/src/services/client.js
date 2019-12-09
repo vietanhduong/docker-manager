@@ -2,7 +2,7 @@ import axios from 'axios';
 import Qs from 'qs';
 import Hs from 'humps';
 
-const baseURL = 'http://localhost:5000' || 'http://35.247.190.151:8991';
+const baseURL = 'http://localhost:5000';
 const client = axios.create({
   baseURL,
   transformRequest: [(data) => Hs.decamelizeKeys(data), ...axios.defaults.transformRequest],
