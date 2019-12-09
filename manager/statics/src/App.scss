@@ -1,0 +1,44 @@
+.MuiButton-list {
+  .MuiButton-label {
+    justify-content: flex-start;
+  }
+
+  .MuiButton-root {
+    text-transform: none;
+    font-weight: 400;
+  }
+}
+
+.MuiLink-item {
+  .MuiLink-root {
+    text-decoration: none !important;
+  }
+}
+
+.app-menu {
+  a,
+  a:hover {
+    color: unset;
+  }
+
+  .MuiMenuItem-root {
+    border-top-right-radius: 24px;
+    border-bottom-right-radius: 24px;
+
+    padding: 10px 24px;
+    min-width: 240px;
+
+    .MuiSvgIcon-root {
+      margin-right: 12px;
+    }
+  }
+
+  .MuiMenuItem-root.active {
+    background: #e8f0fe;
+    color: #1967d2;
+  }
+
+  .MuiMenuItem-root.inactive {
+    color: #999;
+  }
+}
