@@ -3,7 +3,7 @@ This simple project help you manage docker containers by using `Docker Daemon AP
 
 Todo
 ----
-* [ ] Support events change
+* [x] Support events change
 * [x] Support view log container
 * [ ] Support UI 
 * [ ] Write `test`
