@@ -32,4 +32,47 @@ services:
 $ docker-compose up
 ```
 
+Kubernetes
+----
+Just for fun. You can try my config :)
+
+```yaml
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+ name: docker-manager
+ labels:
+   app: docker-manager
+spec:
+ replicas: 1
+ template:
+    metadata:
+      labels:
+        app: docker-manager
+    spec:
+      containers:
+      - name: docker-manager
+        image: vietanhs0817/docker-manager:latest
+        ports:
+          - containerPort: 5000
+        volumeMounts:
+        - name: dockersock
+          mountPath: "/var/run/docker.sock"
+      volumes:
+      - name: dockersock
+        hostPath:
+          path: /var/run/docker.sock
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: docker-manager-service
+spec:
+  ports:
+    - name: http
+      port: 5000
+  selector:
+    app: docker-manager
+```
+
 **NOTE: For more details go to `GET localhost:5000/api HTTP/1.1`**
