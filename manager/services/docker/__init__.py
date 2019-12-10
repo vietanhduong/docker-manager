@@ -43,12 +43,20 @@ class DockerManager(object):
     def container_restart(self, container_id: str):
         return self.__action_with_container("restart", container_id)
 
-    def container_kill(self, container_id):
+    def container_kill(self, container_id: str):
         return self.__action_with_container("kill", container_id)
+
+    def container_logs(self, container_id: str):
+        self.__check_container_existed(container_id)
+        response = self.__session.get(f"{self.__BASE_URL}/containers/{container_id}/logs?stderr=1&stdout=1&tail=all&follow=1",
+                                      stream=True,
+                                      headers={"Content-Type": "text/plain; charset=utf8"})
+        response.encoding = "utf-8"
+        return response
 
     def __action_with_container(self, action, container_id):
         self.__check_container_existed(container_id)
-        response = self.__session.post(f"{self.__BASE_URL}/containers/{container_id}/{action}?t=3")
+        response = self.__session.post(f"{self.__BASE_URL}/containers/{container_id}/{action}?t=1")
         if response.status_code != const.HTTP_204:
             raise Exception(f"{action} container {container_id} failed: HTTP_CODE: {response.status_code}")
 
