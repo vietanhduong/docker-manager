@@ -66,6 +66,14 @@ class DockerManager(object):
             for line in response.iter_lines():
                 yield line[8:] + b"\n"
 
+    def events(self):
+        """
+        This method return a stream
+        """
+        response = self.__session.get(f"{self.__BASE_URL}/events", stream=True)
+        for line in response.iter_lines():
+            yield line + b"\n"
+
     def is_tty(self, container_id):
         container = self.container_inspect(container_id)
         config = container.get("config") or {}
