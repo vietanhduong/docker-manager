@@ -50,14 +50,7 @@ class ContainerKill(_fr.Resource):
 class ContainerLogs(_fr.Resource):
 
     def get(self, container_id: str):
-        # resp = dm.container_logs(container_id)
-
-        # def stream():
-        #     for line in resp.iter_lines():
-        #         # yield line[8:] + b"\n"
-        #         yield line + b"\n"
-
-        return Response(stream_with_context(dm.container_logs(container_id)))
+        return Response(stream_with_context(dm.container_logs(container_id)), mimetype="text/event-stream", headers={'Cache-Control': 'no-cache'})
 
 
 @ns.route("/<container_id>/inspect")

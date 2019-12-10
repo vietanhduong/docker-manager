@@ -19,7 +19,6 @@ def _after_request(response):
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, ' \
                                                        'Accept, Authorization, Content-Disposition'
-
     return response
 
 

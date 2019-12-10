@@ -18,4 +18,4 @@ dm = DockerService.DockerManager()
 class DockerEventController(_fr.Resource):
 
     def get(self):
-        return Response(stream_with_context(dm.events()), mimetype="text/event-stream")
+        return Response(stream_with_context(dm.events()), mimetype="text/event-stream", headers={'Cache-Control': 'no-cache'})
