@@ -15,17 +15,30 @@
   }
 }
 
+.app-layout {
+  display: flex;
+}
+
 .app-menu {
+  overflow-y: scroll;
+  height: 100vh;
+
+  .menu-item-icons {
+    position: absolute;
+    right: 12px;
+  }
+
   a,
   a:hover {
     color: unset;
+    text-decoration: none;
   }
 
   .MuiMenuItem-root {
     border-top-right-radius: 24px;
     border-bottom-right-radius: 24px;
 
-    padding: 10px 24px;
+    padding: 12px 156px 12px 24px;
     min-width: 240px;
 
     .MuiButtonBase-root {
