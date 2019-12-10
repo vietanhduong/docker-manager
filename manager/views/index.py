@@ -8,6 +8,6 @@ _logger = logging.getLogger(__name__)
 index_bp = Blueprint('view', __name__, url_prefix='/')
 
 
-@index_bp.route('')
-def index():
+@index_bp.route('/<path:path>', defaults={'path': ''})
+def index(path):
     return render_template("index.html")
