@@ -7,6 +7,8 @@ Todo
 * [x] Support view log container
 * [ ] Support UI 
 * [ ] Write `test`
+* [x] Support view log `TTY` container
+* [x] Inspect container 
 
 Run
 ----

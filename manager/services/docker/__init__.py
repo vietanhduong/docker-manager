@@ -7,6 +7,8 @@ from manager.utilities import const
 
 __author__ = 'anh.dv'
 
+from manager.utilities.common import convert_camel_to_snake
+
 from manager.utilities.exceptions import BadRequestException
 
 _logger = logging.getLogger(__name__)
@@ -19,7 +21,7 @@ class DockerManager(object):
         self.__session = requests_unixsocket.Session()
 
     def get_containers(self, container_id: str = None):
-        response = self.__session.get(f"{self.__BASE_URL}/containers/json")
+        response = self.__session.get(f"{self.__BASE_URL}/containers/json?all=1")
         ret = []
         if response.status_code == const.HTTP_200:
             res = response.json()
@@ -30,12 +32,14 @@ class DockerManager(object):
 
         return ret
 
-    @staticmethod
-    def stream(function, args: tuple or list = None, kwargs: dict = None):
-        args = args or ()
-        kwargs = kwargs or {}
-        while True:
-            yield json.dumps(function(*args, **kwargs))
+    def container_inspect(self, container_id: str):
+        resp = self.__session.get(f'{self.__BASE_URL}/containers/{container_id}/json')
+        if resp.status_code != const.HTTP_200:
+            raise Exception(f'Inspect container {container_id} failed with code: {resp.status_code}')
+
+        ret = convert_camel_to_snake(resp.json())
+
+        return ret
 
     def container_stop(self, container_id: str):
         return self.__action_with_container("stop", container_id)
@@ -47,12 +51,26 @@ class DockerManager(object):
         return self.__action_with_container("kill", container_id)
 
     def container_logs(self, container_id: str):
+        """
+        This method return a stream
+        """
         self.__check_container_existed(container_id)
+
         response = self.__session.get(f"{self.__BASE_URL}/containers/{container_id}/logs?stderr=1&stdout=1&tail=all&follow=1",
-                                      stream=True,
-                                      headers={"Content-Type": "text/plain; charset=utf8"})
-        response.encoding = "utf-8"
-        return response
+                                      stream=True)
+        is_tty_ = self.is_tty(container_id)
+        if is_tty_:
+            for line in response.iter_lines():
+                yield line + b"\n"
+        else:
+            for line in response.iter_lines():
+                yield line[8:] + b"\n"
+
+    def is_tty(self, container_id):
+        container = self.container_inspect(container_id)
+        config = container.get("config") or {}
+        tty = config.get("tty")
+        return tty if tty is not None else False
 
     def __action_with_container(self, action, container_id):
         self.__check_container_existed(container_id)
@@ -79,7 +97,7 @@ class DockerManager(object):
             "type": port.get("Type")
         } for port in ports]
         return {
-            "id": container.get("Id") or "",
+            "id": container.get("Id")[:12] or "",
             "name": (container.get("Names") or ["/"])[0][1:],
             "image": container.get("Image"),
             "ports": ports,
